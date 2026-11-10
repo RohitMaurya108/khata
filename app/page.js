@@ -10,6 +10,13 @@ export default function Home() {
   const [profile, setProfile] = useState(undefined);
   const [lang, setLang] = useState("en");
   const [view, setView] = useState("app");
+  const [em, setEm] = useState(""); const [pw, setPw] = useState(""); const [msg, setMsg] = useState("");
+  const testOn = process.env.NEXT_PUBLIC_TEST_LOGIN === "true";
+  const testAuth = async mode => {
+    setMsg("");
+    const { error } = mode === "up" ? await sb.auth.signUp({ email: em, password: pw }) : await sb.auth.signInWithPassword({ email: em, password: pw });
+    if (error) setMsg(error.message); else if (mode === "up") setMsg("Account created. If you are not signed in automatically, turn off email confirmation in Supabase.");
+  };
   const t = T(lang);
 
   useEffect(() => {
@@ -34,6 +41,12 @@ export default function Home() {
       <h1>{t("Khata")}</h1>
       <p>{t("Your business cashbook. Record cash in and cash out in two taps, then see where your money went.")}</p>
       <button className="btn g" onClick={login}>{t("Continue with Google")}</button>
+      {testOn && <div style={{ display: "grid", gap: 8 }}>
+        <div className="note">Test login (turn off by removing NEXT_PUBLIC_TEST_LOGIN)</div>
+        <input type="email" placeholder="Email" value={em} onChange={e => setEm(e.target.value)} />
+        <input type="password" placeholder="Password (6+ characters)" value={pw} onChange={e => setPw(e.target.value)} />
+        <div style={{ display: "flex", gap: 8 }}><button className="btn" style={{ flex: 1 }} onClick={() => testAuth("in")}>Sign in</button><button className="btn" style={{ flex: 1 }} onClick={() => testAuth("up")}>Sign up</button></div>
+        {msg && <div className="note">{msg}</div>}</div>}
       <button className="btn" onClick={toggleLang}>{lang === "hi" ? "English" : "हिन्दी"}</button>
     </div></div>);
   const out = () => sb.auth.signOut();
