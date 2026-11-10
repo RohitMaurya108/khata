@@ -1,5 +1,29 @@
 import "./globals.css";
-export const metadata = { title: "Khata – Business Cashbook", description: "Simple cash in, cash out and business accounts" };
+import { Inter } from "next/font/google";
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+export const metadata = {
+  title: "Khata – Business Billing & Cashbook",
+  description: "GST invoices, cashbook, stock and party ledgers",
+};
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#4F46E5",
+};
 export default function RootLayout({ children }) {
-  return (<html lang="en"><head><link rel="manifest" href="/manifest.json" /><meta name="theme-color" content="#12263A" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" /></head><body>{children}</body></html>);
+  return (
+    <html lang="en" className={inter.variable}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}>
+        {children}
+      </body>
+    </html>
+  );
 }
